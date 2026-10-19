@@ -1,0 +1,9 @@
+[package]
+name = "basilisk"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Stephanos Doukas <@doktorupnos>"]
+license = "MIT"
+compiler = "0.15.1"
+repository = "https://github.com/doktorupnos/basilisk/"
+description = "A personalised academic-format layout library for typst."
