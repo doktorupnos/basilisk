@@ -37,6 +37,11 @@
     font: "Consolas",
     style: true
   ),
+  dropcap: (
+    height: 2,
+    gap: 6pt,
+    font: "GFS Neohellenic"
+  ),
   divider: (
     pattern: "1",
     label: ""

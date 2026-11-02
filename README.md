@@ -168,6 +168,14 @@ Below are all the available configurable library options found in `options.typ`.
 | **`body-indent`** | Specifies the distance between the index of an item in a list and its content. Default: `1em`. |
 | **`spacing`** | The distance between the items in a list. Default: `1em`. |
 
+### DROPCAP OPTIONS
+
+| **OPTION** | **INFO** |
+| :---: | --- |
+| **`height`** | The height of the dropcapped letter. Default: `2`. |
+| **`gap`** | The size of the gap between the dropcapped letter and the paragraph. Default: `6pt`. |
+| **`font`** | The font-family of the dropcapped letter. Default: [`GFS Neohellenic`](https://fonts.google.com/specimen/GFS+Neohellenic). |
+
 ### DIDIVER PAGE OPTIONS
 
 | **OPTION** | **INFO** |
