@@ -28,55 +28,53 @@
 ///
 /// - level (int): The heading's depth level.
 /// -> length
-#let heading-size(level) = {
+#let head-size(level) = {
   let size = opt.text.size
   let scale = opt.heading.scale.at(level - 1)
   size * scale
 }
 
-/// Level 1 heading prefix.
+/// Creates the numbering prefix label of a heading based on
+/// it's pattern. It passes the counter of the current level,
+/// along with all levels above it.
+///
+/// - level (int): The heading's depth level.
+/// - pattern (string): The heading's numbering pattern.
 /// -> content
-#let prefix-head1() = {
-  let pattern = opt.heading.pattern.at(0)
+#let head-number(level, pattern) = {
+  let counters = (
+    counter-head1,
+    counter-head2,
+    counter-head3
+  )
+  context numbering(
+    pattern,
+    ..counters.slice(0, level).map(c => c.get().first())
+  )
+}
+
+/// Creates the heading prefix based on the heading's
+/// depth level. If no pattern is given in the options file,
+/// it shows nothing.
+///
+/// - level (int): The heading's depth level.
+/// -> content
+#let head-prefix(level) = {
+  let pattern = opt.heading.pattern.at(level - 1)
   if pattern.len() != 0 {
-    let label = opt.heading.label
-    if label.len() != 0 {
-      label
-      sym.space
+    let number = head-number(level, pattern)
+    if level == 1 {
+      let label = opt.heading.label
+      if label.len() != 0 {
+        label
+        sym.space
+      }
+      number
+      if opt.heading.academic { v(1em) } else { h(0.8em) }
+    } else {
+      number
+      h(0.6em)
     }
-    counter-head1.display(pattern)
-    if opt.heading.academic { v(1em) } else { h(0.8em) }
-  }
-}
-
-/// Level 2 heading prefix.
-/// -> content
-#let prefix-head2() = {
-  let pattern = opt.heading.pattern.at(1)
-  if pattern.len() != 0 {
-    context numbering(
-      pattern,
-      counter-head1.get().first(),
-      counter-head2.get().first()
-    )
-    h(0.8em)
-  }
-}
-
-/// Level 3 heading prefix.
-/// -> content
-#let prefix-head3() = {
-  let pattern = opt.heading.pattern.at(2)
-  if pattern.len() != 0 {
-    strong(
-      context numbering(
-        pattern,
-        counter-head1.get().first(),
-        counter-head2.get().first(),
-        counter-head3.get().first()
-      )
-    )
-    h(0.8em)
   }
 }
 
@@ -91,7 +89,7 @@
   counter-header.step()
   v(6em, weak: false)
   bookmark(1, title)
-  prefix-head1()
+  head-prefix(1)
   title
   v(6em)
 }
@@ -103,7 +101,7 @@
 #let style-normal(title) = {
   v(2em)
   bookmark(1, title)
-  prefix-head1()
+  head-prefix(1)
   title
   v(1em)
 }
@@ -121,7 +119,7 @@
     bookmarked: false,
   )
   show heading.where(level: 1): it => {
-    set text(size: heading-size(1))
+    set text(size: head-size(1))
     counter-head1.step()
     counter-head2.update(0)
     counter-head3.update(0)
@@ -132,21 +130,21 @@
     )
   }
   show heading.where(level: 2): it => {
-    set text(size: heading-size(2))
+    set text(size: head-size(2))
     show linebreak: none
     counter-head2.step()
     counter-head3.update(0)
     v(2em)
     bookmark(2, it.body)
-    prefix-head2()
+    head-prefix(2)
     it.body
     v(1em)
   }
   show heading.where(level: 3): it => {
-    set text(size: heading-size(3))
+    set text(size: head-size(3))
     counter-head3.step()
     v(2em)
-    head-3-prefix()
+    head-prefix(3)
     it.body
     v(1em)
   }
